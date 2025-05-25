@@ -14,7 +14,7 @@ size_t terminal_column;
 uint8_t terminal_color;
 uint16_t* terminal_buffer = (uint16_t*)VGA_MEMORY;
 
-void terminal_clear(void)
+static void terminal_clear(void)
 {
 	for (size_t y = 0; y < VGA_HEIGHT; y++) {
 		for (size_t x = 0; x < VGA_WIDTH; x++) {
@@ -24,7 +24,7 @@ void terminal_clear(void)
 	}
 }
 
-void terminal_initialize(void) 
+void terminal_setup(void) 
 {
 	terminal_row = 0;
 	terminal_column = 0;
@@ -38,13 +38,13 @@ void terminal_setcolor(uint8_t color)
 	terminal_color = color;
 }
 
-void terminal_putentryat(char c, uint8_t color, size_t x, size_t y) 
+static void terminal_putentryat(char c, uint8_t color, size_t x, size_t y) 
 {
 	const size_t index = y * VGA_WIDTH + x;
 	terminal_buffer[index] = vga_entry(c, color);
 }
 
-void terminal_putchar(char c) 
+static void terminal_putchar(char c) 
 {
 	//	Special symbols
 	if(c == '\n')

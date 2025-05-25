@@ -1,4 +1,5 @@
 #include "tty/tty.h"
+#include "tables/tables.h"
 
 /* Check if the compiler thinks you are targeting the wrong operating system. */
 #if defined(__linux__)
@@ -11,12 +12,21 @@
 #endif
 
 
+
+
 void kernel_main(void) 
 {
-	/* Initialize terminal interface */
-	terminal_initialize();
+	terminal_setup();
+	setup_tables();
 
-	/* Newline support is left as an exercise. */
-	terminal_writestring("\tHello, kernel World!\n");
+	terminal_writestring("Hello, kernel World!\n");
+
+	__asm__ volatile("int $0");
 	
+	// asm("cli");
+
+	// for(;;) {
+    // 	asm("hlt");
+ 	// }
+
 }
