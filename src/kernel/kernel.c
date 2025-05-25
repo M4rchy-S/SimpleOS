@@ -12,8 +12,6 @@
 #endif
 
 
-
-
 void kernel_main(void) 
 {
 	terminal_setup();
@@ -21,12 +19,14 @@ void kernel_main(void)
 
 	terminal_writestring("Hello, kernel World!\n");
 
-	__asm__ volatile("int $0");
+	// __asm__ volatile("int $0");
+
+	terminal_writestring("\n\nStrange thing happens\n");
 	
 	// asm("cli");
 
-	// for(;;) {
-    // 	asm("hlt");
- 	// }
+	for(;;) {
+    	asm("hlt");
+ 	}
 
 }

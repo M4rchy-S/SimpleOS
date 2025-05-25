@@ -9,7 +9,7 @@ BUILD_DIR=build
 # SRCS_S := src/boot.s
 
 OBJS_C := $(BUILD_DIR)/kernel.o
-OBJS_S := $(BUILD_DIR)/boot.o $(BUILD_DIR)/load_gdt.o $(BUILD_DIR)/idt_macros.o 
+OBJS_S := $(BUILD_DIR)/boot.o $(BUILD_DIR)/load_gdt.o $(BUILD_DIR)/idt_isr.o 
 
 OBJS = ${OBJS_C} ${OBJS_S}
 
@@ -31,7 +31,7 @@ assems: $(BUILD_DIR)/boot.o
 $(BUILD_DIR)/boot.o: always
 	$(ASM) src/boot.s -o $(BUILD_DIR)/boot.o
 	$(NASM) src/kernel/tables/asm/load_gdt.s -o $(BUILD_DIR)/load_gdt.o $(NASM_FLAGS)
-	$(NASM) src/kernel/tables/asm/idt_macros.s -o $(BUILD_DIR)/idt_macros.o $(NASM_FLAGS)
+	$(NASM) src/kernel/tables/asm/idt_isr.s -o $(BUILD_DIR)/idt_isr.o $(NASM_FLAGS)
 
 
 kernel: $(BUILD_DIR)/kernel.o
