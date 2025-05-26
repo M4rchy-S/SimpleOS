@@ -3,11 +3,11 @@
 
 #include "../vga/vga.h"
 #include "../libc/string.h"
+#include "../time/RTC.h"
 
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
-
 
 size_t terminal_row;
 size_t terminal_column;
@@ -56,6 +56,8 @@ static void terminal_putchar(char c)
 			terminal_row = 0;
 			terminal_clear();
 		}
+		
+		terminal_writestring("> ");
 
 		return;
 	}
@@ -99,6 +101,73 @@ void terminal_write(const char* data, size_t size)
 void terminal_writestring(const char* data) 
 {
 	terminal_write(data, strlen(data));
+}
+
+void terminal_backspace()
+{
+	if( terminal_column  <= 2)
+	{
+		return;
+	}
+
+	const size_t index = terminal_row * VGA_WIDTH + terminal_column - 1;
+	terminal_buffer[index] = vga_entry(' ', terminal_color);
+	terminal_column -= 1;
+
+}
+
+#define MAX_BUFFER_LENGTH 100
+uint32_t buffer_length = 0;
+char input_buffer[MAX_BUFFER_LENGTH];
+
+static void handle_command(char *command)
+{
+	if(strcmp(command, "time") == 0)
+	{
+		prints("[+] Your time\n");
+		print_time();
+	}
+	else if(strcmp(command, "help") == 0)
+	{
+		prints("[?] Available commands:\ntime - get current time\n");
+	}
+	else
+	{
+		prints("[-] Unknown command\n");
+	}
+}
+
+
+void buffer_add_char(char *ch)
+{
+	if(buffer_length >= MAX_BUFFER_LENGTH - 1)
+		return;
+
+	input_buffer[buffer_length] = ch[0];
+	buffer_length += 1;
+}
+
+void buffer_rem_char()
+{
+	if(buffer_length <= 0)
+		return;
+
+	buffer_length -= 1;
+}	
+
+void buffer_process()
+{
+	input_buffer[buffer_length] = '\0';
+
+	// prints("Processing buffer: ");
+	// prints(input_buffer);
+	// prints("\n");
+
+	handle_command(input_buffer);
+
+	buffer_length = 0;
+	input_buffer[0] = '\0';
+	
 }
 
 

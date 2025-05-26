@@ -1,4 +1,5 @@
 
+extern error_handler
 global error_isr
 error_isr:
     pusha 
@@ -8,6 +9,8 @@ error_isr:
     mov ah, 0x0F
     mov [0xB8000], ax
 
+
+    call error_handler
     ; hlt
 
     sti

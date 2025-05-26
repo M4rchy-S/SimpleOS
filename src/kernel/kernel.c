@@ -1,4 +1,4 @@
-#include "tty/tty.h"
+#include "libc/print.h"
 #include "tables/tables.h"
 
 /* Check if the compiler thinks you are targeting the wrong operating system. */
@@ -17,15 +17,14 @@ void kernel_main(void)
 	terminal_setup();
 	setup_tables();
 
-	terminal_writestring("Hello, kernel World!\n");
 
-	// __asm__ volatile("int $0");
+	prints("\t --= Welcome to SimpleOS v0.1 =--\n");
 
-	terminal_writestring("\n\nStrange thing happens\n");
 	
 	// asm("cli");
 
 	for(;;) {
+		// print_time();
     	asm("hlt");
  	}
 

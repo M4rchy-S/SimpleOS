@@ -18,6 +18,13 @@ typedef struct {
 	uint64_t	base;
 } __attribute__((packed)) idtr_t;
 
+#define IDT_MAX_DESCRIPTORS 255
+
+__attribute__((aligned(0x10)))
+static idt_entry_t idt[IDT_MAX_DESCRIPTORS];
+
+idtr_t idtr;
+
 void idt_set_descriptor(uint8_t vector, void* isr, uint8_t flags) {
     idt_entry_t* descriptor = &idt[vector];
 
@@ -28,12 +35,7 @@ void idt_set_descriptor(uint8_t vector, void* isr, uint8_t flags) {
     descriptor->reserved       = 0;
 }
 
-#define IDT_MAX_DESCRIPTORS 256
 
-__attribute__((aligned(0x10)))
-static idt_entry_t idt[IDT_MAX_DESCRIPTORS];
-
-idtr_t idtr;
 
 extern void error_isr(void);
 extern void keyboard_isr(void);
